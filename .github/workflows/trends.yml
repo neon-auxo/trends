@@ -1,0 +1,41 @@
+name: hourly-trends
+on:
+  schedule:
+    - cron: "0 * * * *"      # 매시 정각
+  workflow_dispatch: {}       # 수동 실행 버튼
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write         # 결과를 리포에 커밋하기 위함
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+
+      - name: Install deps
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Crawl (Playwright)
+        env:
+          GEO_LIST: "KR,US,JP"
+          HOURS_LIST: "4"
+          CATEGORY_LIST: "3"
+        run: node crawl.js
+
+      - name: Summarize (Cloudflare Workers AI)
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN:  ${{ secrets.CF_API_TOKEN }}
+          SUMMARY_ITEMS: "7"
+        run: node summarize.js
+
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "update: $(date -u +'%Y-%m-%dT%H:%MZ')" || echo "no changes"
+          git push
