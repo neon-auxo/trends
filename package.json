@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "crawl": "node crawl.js",
-    "summarize": "node summarize.js"
+    "crawl": "node crawl.js"
   },
   "dependencies": {
     "playwright": "^1.47.0"
