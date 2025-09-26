@@ -1,5 +1,7 @@
+// crawl.js — 트렌드 실데이터(카드 단위) 추출 버전
 import { chromium } from "playwright";
 import fs from "fs/promises";
+import crypto from "crypto";
 
 const GEO_LIST = (process.env.GEO_LIST || "KR").split(",").map(s => s.trim());
 const HOURS_LIST = (process.env.HOURS_LIST || "4").split(",").map(s => s.trim());
@@ -7,73 +9,145 @@ const CATEGORY_LIST = (process.env.CATEGORY_LIST || "3").split(",").map(s => s.t
 
 const OUT_JSON = "data/latest.json";
 const SNAPSHOT_DIR = "data/snapshots";
+const HISTORY_DIR = "data/history";
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const sha256 = (s) => "sha256:" + crypto.createHash("sha256").update(s || "").digest("hex");
+const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
+
+function nowKSTISO() {
+  const kst = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Seoul", hour12: false });
+  return kst.replace(" ", "T") + "+09:00";
+}
 
 async function ensureDirs() {
   await fs.mkdir("data", { recursive: true });
   await fs.mkdir(SNAPSHOT_DIR, { recursive: true });
+  await fs.mkdir(HISTORY_DIR, { recursive: true });
 }
 
-function nowKSTISO() {
-  const kst = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Seoul", hour12: false });
-  // "2025-09-26 12:34:56" → ISO 비슷하게 변환
-  return kst.replace(" ", "T") + "+09:00";
+async function waitForAny(page, selectors, timeout = 8000) {
+  for (const sel of selectors) {
+    try {
+      await page.waitForSelector(sel, { timeout });
+      return sel;
+    } catch (_) {}
+  }
+  throw new Error("필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).");
 }
 
-async function extractTitles(page) {
-  // DOM 변동에 대비한 "후보 셀렉터" 다중 시도
-  const selCandidates = [
-    'article h3',               // 카드 헤드라인
-    'article a[aria-label]',    // 링크에 라벨이 있을 경우
-    'div[role="article"] h3',
-    'div.card h3',
-    'li h3',
-    'h3'
+// 카드 단위 추출(다중 후보 셀렉터)
+async function extractItems(page) {
+  // 페이지 구조 변화 대비: 여러 후보 컨테이너/제목 셀렉터를 순차 시도
+  const containerSel = [
+    "article",                     // 최우선
+    "main article",
+    "div[role='article']",
+    "section article",
+    "li[role='listitem'] article"
   ];
-  let texts = [];
-  for (const sel of selCandidates) {
-    const found = await page.$$eval(sel, els =>
-      els.map(e => (e.textContent || "").trim()).filter(Boolean)
-    ).catch(() => []);
-    texts = (found || []).filter(x => x.length > 0);
-    if (texts.length >= 5) break; // 충분히 모였으면 중단
-  }
-  // 중복 제거 및 상위 30개 제한
-  const seen = new Set();
-  const dedup = [];
-  for (const t of texts) {
-    const key = t.replace(/\s+/g, " ").toLowerCase();
-    if (!seen.has(key)) { seen.add(key); dedup.push(t); }
-    if (dedup.length >= 30) break;
-  }
-  return dedup;
+  await waitForAny(page, containerSel, 8000);
+
+  const items = await page.$$eval(containerSel.join(","), (nodes) => {
+    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
+    const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
+
+    // 각 카드에서 핵심 필드 수집
+    const pick = (el) => {
+      // 제목 후보
+      const title =
+        norm(el.querySelector("h3")?.textContent) ||
+        norm(el.querySelector("h2")?.textContent) ||
+        norm(el.querySelector("a[aria-label]")?.getAttribute("aria-label")) ||
+        "";
+
+      // 설명 후보(너무 길면 잘라줌)
+      let desc = "";
+      const descCand = [
+        "p", "div[role='paragraph']", "div p", "article p"
+      ];
+      for (const s of descCand) {
+        const t = norm(el.querySelector(s)?.textContent);
+        if (t && t.length >= 20) { desc = t; break; }
+      }
+      if (!desc) {
+        const short = norm(el.textContent || "");
+        desc = short.length > 160 ? short.slice(0, 160) : short;
+      }
+
+      // 트렌드 내부 탐색 링크(있을 때)
+      const explore =
+        el.querySelector("a[href*='/trends/']")?.href ||
+        el.querySelector("a[href*='trends.google']")?.href || "";
+
+      // 외부 관련 링크 상위 3개 (google trends 도메인은 제외)
+      const links = Array.from(el.querySelectorAll("a[href^='http']"))
+        .map(a => ({ title: norm(a.textContent), url: a.href, domain: host(a.href) }))
+        .filter(x => x.url && x.title && !/trends\.google/i.test(x.domain))
+        .slice(0, 3);
+
+      return { term: title, desc, explore, links };
+    };
+
+    const out = [];
+    for (const el of nodes) {
+      const row = pick(el);
+      if (row.term) out.push(row);
+    }
+    // 중복 제거(제목 기준)
+    const seen = new Set();
+    const dedup = [];
+    for (const r of out) {
+      const key = r.term.toLowerCase();
+      if (!seen.has(key)) { seen.add(key); dedup.push(r); }
+    }
+    // 상위 30개까지만
+    return dedup.slice(0, 30).map((r, i) => ({ rank: i + 1, ...r }));
+  });
+
+  return items;
 }
 
 async function crawlOne(ctx, { geo, hours, category }) {
   const url = `https://trends.google.co.kr/trending?geo=${encodeURIComponent(geo)}&hours=${encodeURIComponent(hours)}&category=${encodeURIComponent(category)}`;
   const page = await ctx.newPage();
-  const res = await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
+  const resp = await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
   await sleep(1200);
 
-  const status = res?.status() ?? 0;
-  const html = await page.content();
-  const titles = await extractTitles(page);
+  const status = resp?.status() ?? 0;
 
-  // 스냅샷(디버깅용) 저장
+  // 실데이터 추출
+  const items = await extractItems(page);
+
+  // 디버깅용 스냅샷 저장(용량 우려 시 .gitignore 권장)
+  const html = await page.content();
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const snapFile = `${SNAPSHOT_DIR}/trending_${geo}_${hours}h_cat${category}_${stamp}.html`;
   await fs.writeFile(snapFile, html, "utf8");
 
   await page.close();
-  return { url, status, titles, snapshot: snapFile };
+
+  // 페이지 해시(항목 기준) — 동일이면 변화 없음 판단
+  const pageHash = sha256(JSON.stringify(items.map(x => x.term)));
+
+  return {
+    geo, hours, category, url, status,
+    capturedAtKST: nowKSTISO(),
+    pageHash,
+    itemCount: items.length,
+    items,
+    snapshot: snapFile
+  };
 }
 
 async function main() {
   await ensureDirs();
+
   const browser = await chromium.launch({ headless: true });
   const ctx = await browser.newContext({
-    userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
+    userAgent:
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
   });
 
   const combos = [];
@@ -81,16 +155,11 @@ async function main() {
     for (const hours of HOURS_LIST) {
       for (const category of CATEGORY_LIST) {
         try {
-          const r = await crawlOne(ctx, { geo, hours, category });
-          combos.push({
-            geo, hours, category,
-            url: r.url, status: r.status,
-            count: r.titles.length,
-            titles: r.titles
-          });
-          await sleep(1000 + Math.random() * 1000);
+          const rec = await crawlOne(ctx, { geo, hours, category });
+          combos.push(rec);
+          await sleep(800 + Math.random() * 900);
         } catch (e) {
-          combos.push({ geo, hours, category, error: String(e) });
+          combos.push({ geo, hours, category, error: String(e), capturedAtKST: nowKSTISO() });
         }
       }
     }
@@ -98,12 +167,19 @@ async function main() {
 
   await browser.close();
 
-  const out = {
+  // latest.json 저장(요약)
+  const latest = {
     fetchedAtKST: nowKSTISO(),
     combos
   };
-  await fs.writeFile(OUT_JSON, JSON.stringify(out, null, 2), "utf8");
-  console.log(`[crawl] saved ${OUT_JSON}`);
+  await fs.writeFile(OUT_JSON, JSON.stringify(latest, null, 2), "utf8");
+
+  // history에도 저장(타임스탬프 파일)
+  const ts = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "");
+  const histFile = `${HISTORY_DIR}/latest_${ts}.json`;
+  await fs.writeFile(histFile, JSON.stringify(latest), "utf8");
+
+  console.log(`[crawl] combos=${combos.length}, saved ${OUT_JSON} & ${histFile}`);
 }
 
 main().catch(err => {
