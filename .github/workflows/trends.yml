@@ -1,21 +1,33 @@
 name: hourly-trends
+
 on:
   schedule:
     - cron: "0 * * * *"      # 매시 정각
   workflow_dispatch: {}       # 수동 실행 버튼
+
+# 동시에 두 번 돌지 않도록(푸시 충돌 방지)
+concurrency:
+  group: hourly-trends-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run:
     runs-on: ubuntu-latest
     permissions:
       contents: write         # 결과를 리포에 커밋하기 위함
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # rebase를 위해 전체 히스토리 필요
+
       - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+        with:
+          node-version: "20"
 
       - name: Install deps
         run: |
-          npm install
+          npm ci || npm install
           npx playwright install --with-deps chromium
 
       - name: Crawl (Playwright)
@@ -25,6 +37,7 @@ jobs:
           CATEGORY_LIST: "3"
         run: node crawl.js
 
+      # 요약 단계가 필요해지면 주석 해제
       # - name: Summarize (Cloudflare Workers AI)
       #   env:
       #     CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
@@ -34,8 +47,19 @@ jobs:
 
       - name: Commit outputs
         run: |
+          set -e
+          BRANCH="${GITHUB_REF_NAME:-main}"
+
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+
+          # 원격과 동기화(뒤쳐짐/경합 해결)
+          git fetch origin "$BRANCH"
+          git checkout "$BRANCH"
+          git pull --rebase origin "$BRANCH" || true
+
           git add -A
           git commit -m "update: $(date -u +'%Y-%m-%dT%H:%MZ')" || echo "no changes"
-          git push
+
+          # 현재 HEAD를 기본 브랜치에 명시적으로 푸시
+          git push origin HEAD:"$BRANCH"
