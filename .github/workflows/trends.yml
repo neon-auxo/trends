@@ -25,12 +25,12 @@ jobs:
           CATEGORY_LIST: "3"
         run: node crawl.js
 
-      - name: Summarize (Cloudflare Workers AI)
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN:  ${{ secrets.CF_API_TOKEN }}
-          SUMMARY_ITEMS: "7"
-        run: node summarize.js
+      # - name: Summarize (Cloudflare Workers AI)
+      #   env:
+      #     CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      #     CF_API_TOKEN:  ${{ secrets.CF_API_TOKEN }}
+      #     SUMMARY_ITEMS: "7"
+      #   run: node summarize.js
 
       - name: Commit outputs
         run: |
