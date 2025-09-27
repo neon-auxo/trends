@@ -1,26 +1,26 @@
 {
-  "fetchedAtKST": "2025-09-28T01:14:37+09:00",
+  "fetchedAtKST": "2025-09-28T02:11:38+09:00",
   "combos": [
     {
       "geo": "KR",
       "hours": "4",
       "category": "3",
       "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T01:13:09+09:00"
+      "capturedAtKST": "2025-09-28T02:10:10+09:00"
     },
     {
       "geo": "US",
       "hours": "4",
       "category": "3",
       "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T01:13:53+09:00"
+      "capturedAtKST": "2025-09-28T02:10:54+09:00"
     },
     {
       "geo": "JP",
       "hours": "4",
       "category": "3",
       "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T01:14:37+09:00"
+      "capturedAtKST": "2025-09-28T02:11:38+09:00"
     }
   ]
 }
