@@ -25,7 +25,6 @@ jobs:
           GEO_LIST: "KR,US,JP"
           CATEGORY_LIST: "3"     # 3=Business → API에선 b
           HOURS: "4"
-          HL: "ko"
           TZ: "-540"
         run: npm run crawl
 

@@ -71,22 +71,40 @@ async function ensureDir(p){ await fs.mkdir(p,{recursive:true}); }
 
 // API 호출(항상 raw 저장). 실패해도 raw 저장해서 원인 파악.
 async function callRealtime({geo, cat, hl, tz, tag}) {
-  const qs = new URLSearchParams({ hl, tz, cat, geo, fi:'0', fs:'0', ri:'200', rs:'20', sort:'0' });
+  const qs = new URLSearchParams({
+    hl, tz, cat, geo,
+    ns: '15',          // ← 추가: 구글 API에서 자주 쓰는 네임스페이스
+    fi: '0', fs: '0', ri: '200', rs: '20', sort: '0'
+  });
   const url = `https://trends.google.com/trends/api/realtimetrends?${qs}`;
+
   const res = await fetch(url, {
     headers: {
-      'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127 Safari/537.36',
-      'Accept':'*/*',
-      'Referer':`https://trends.google.com/trending?geo=${geo}`,
-      'Accept-Language':hl
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36',
+      'Accept': 'text/plain, */*;q=0.1',
+      'Accept-Language': hl,
+      'Referer': `https://trends.google.com/trending?geo=${geo}&hl=${hl}`,
+      'Origin': 'https://trends.google.com',
+      'Sec-Fetch-Site': 'same-origin',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Dest': 'empty'
     }
   });
-  const text = await res.text().catch(()=> '');
+
+  const status = res.status;
+  let text = '';
+  try { text = await res.text(); } catch { text = ''; }
+
   const stamp = new Date().toISOString().replace(/[:.]/g,'-');
   await ensureDir('data/json');
-  await fs.writeFile(path.join('data','json',`raw_${geo}_cat${cat}_hl${hl}_${tag}_${stamp}.txt`), text || `(empty)`, 'utf8');
+  // 상태/헤더까지 같이 저장해 디버깅 쉽게
+  await fs.writeFile(
+    path.join('data','json',`raw_${geo}_cat${cat}_hl${hl}_${tag}_${stamp}.txt`),
+    `# status: ${status}\n# url: ${url}\n# headers: ${JSON.stringify(Object.fromEntries(res.headers), null, 2)}\n\n${text || '(empty)'}\n`,
+    'utf8'
+  );
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`HTTP ${status}`);
   const clean = (text || '').replace(/^\)\]\}',?\n?/, '');
   return JSON.parse(clean);
 }
@@ -94,33 +112,27 @@ async function callRealtime({geo, cat, hl, tz, tag}) {
 // geo/cat 조합  →  [우선 시도, cat=all 폴백, HL 폴백] 순서로 재시도
 async function fetchWithFallbacks(geo, catRaw) {
   const cat = mapCat(catRaw);
-  const tries = [];
 
-  const baseHL = HL_ENV || HL_BY_GEO[geo] || 'en-US';
-  const altHL  = baseHL === 'en-US' ? 'ko' : 'en-US'; // 대체 언어
+  const HL_BY_GEO = { KR: 'ko', US: 'en-US', JP: 'ja' };
+  const baseHL = HL_BY_GEO[geo] || 'en-US';
 
-  // 1) 요청한 cat + baseHL
-  tries.push({ geo, cat, hl: baseHL, tag:'base' });
-
-  // 2) cat=all + baseHL
-  if (cat !== 'all') tries.push({ geo, cat:'all', hl: baseHL, tag:'all' });
-
-  // 3) cat 유지 + altHL
-  tries.push({ geo, cat, hl: altHL, tag:'altHL' });
-
-  // 4) cat=all + altHL
-  if (cat !== 'all') tries.push({ geo, cat:'all', hl: altHL, tag:'allAlt' });
+  // 다중 후보 (순서대로 시도)
+  const hls = Array.from(new Set([baseHL, 'en-US', 'ko', 'ja'])); // 중복 제거
+  const cats = Array.from(new Set([cat, 'all']));
 
   const attempts = [];
-  for (const t of tries) {
-    try {
-      const json = await callRealtime({ ...t, tz: TZ });
-      const items = extractStories(json, HOURS);
-      attempts.push({ ...t, ok: true, count: items.length });
-      if (items.length > 0) return { items, debugAttempts: attempts };
-      // 204/빈 응답 등도 기록
-    } catch (e) {
-      attempts.push({ ...t, ok: false, error: String(e) });
+  for (const hl of hls) {
+    for (const c of cats) {
+      try {
+        const json = await callRealtime({ geo, cat: c, hl, tz: TZ, tag: 'try' });
+        const items = extractStories(json, HOURS);
+        attempts.push({ cat: c, hl, ok: true, count: items.length });
+        if (items.length > 0) {
+          return { items, debugAttempts: attempts };
+        }
+      } catch (e) {
+        attempts.push({ cat: c, hl, ok: false, error: String(e) });
+      }
     }
   }
   return { items: [], debugAttempts: attempts };
