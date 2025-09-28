@@ -4,8 +4,5 @@
   "type": "module",
   "scripts": {
     "crawl": "node crawl.js"
-  },
-  "dependencies": {
-    "playwright": "^1.47.0"
   }
 }
