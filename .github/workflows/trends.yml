@@ -36,3 +36,4 @@ jobs:
           file_pattern: |
             data/latest.json
             data/json/*.json
+            data/json/raw_*.txt

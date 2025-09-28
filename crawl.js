@@ -1,129 +1,56 @@
-// crawl.js — Google Trends 실시간(비공식) JSON 수집 버전
-// Node.js v20 기준 (fetch 내장)
-
-// 환경변수 예:
-// GEO_LIST="KR,US,JP" CATEGORY_LIST="3" HOURS="4" HL="ko" TZ="-540"
-
+// crawl.js — Google Realtime Trends (비공식 JSON) 안정판
 import fs from 'fs/promises';
 import path from 'path';
 
-const HL = process.env.HL || 'ko';
-const TZ = parseInt(process.env.TZ || '-540', 10);
+const HOURS = parseInt(process.env.HOURS || '4', 10);
 const GEO_LIST = (process.env.GEO_LIST || 'KR,US,JP').split(',').map(s => s.trim());
 const CATEGORY_LIST_RAW = (process.env.CATEGORY_LIST || '3').split(',').map(s => s.trim());
-const HOURS = parseInt(process.env.HOURS || '4', 10);
+const TZ = String(process.env.TZ || '-540'); // KST
+const HL_ENV = process.env.HL || ''; // 비워두면 GEO별 기본 HL 사용
 
-// UI의 숫자 카테고리 → API용 코드 매핑(자주 쓰는 것 위주)
-const CATEGORY_MAP = {
-  // UI category= (예: 0 전체, 3 비즈니스/금융) → API cat=
-  '0': 'all',
-  'all': 'all',
-  '3': 'b',          // Business
-  'b': 'b', 'business': 'b',
-  'e': 'e',          // Entertainment
-  'm': 'm',          // Health
-  's': 's',          // Science/Tech
-  't': 't'           // Sports
-};
+// UI의 숫자 카테고리 → API cat 매핑(불확실하면 'all'로 폴백)
+const CATEGORY_MAP = { '0':'all','all':'all','1':'all','2':'all','3':'b','4':'e','5':'m','6':'s','7':'t',
+                       'b':'b','e':'e','m':'m','s':'s','t':'t' };
+const mapCat = c => CATEGORY_MAP[c] || 'all';
 
-function mapCat(c) { return CATEGORY_MAP[c] || 'all'; }
+// GEO별 “가장 안전한 HL”
+const HL_BY_GEO = { KR: 'ko', US: 'en-US', JP: 'ja' };
+
 function nowKST() {
-  const kst = new Date(Date.now() + (9 * 60 * 60 * 1000));
-  return new Date(kst.getTime() - (kst.getTimezoneOffset() * 60 * 1000)).toISOString().replace('Z', '+09:00');
-}
-
-// 비공식 엔드포인트: /trends/api/realtimetrends (XSSI 프리픽스 제거 필요)
-async function fetchRealtime({ geo, cat }) {
-  const params = new URLSearchParams({
-    hl: HL, tz: String(TZ), cat, geo,
-    fi: '0', fs: '0', ri: '200', rs: '20', sort: '0'
-  });
-  const url = `https://trends.google.com/trends/api/realtimetrends?${params}`;
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127 Safari/537.36',
-      'Accept': '*/*',
-      'Referer': `https://trends.google.com/trending?geo=${geo}`,
-      'Accept-Language': HL
-    }
-  });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-
-  // 디버그: 원문 저장
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  await fs.mkdir(path.join('data', 'json'), { recursive: true });
-  await fs.writeFile(path.join('data', 'json', `raw_${geo}_cat${cat}_${stamp}.txt`), text, 'utf8');
-
-  const clean = text.replace(/^\)\]\}',?\n?/, '');
-  return JSON.parse(clean);
-}
-
-function toEpochMsMaybe(v) {
-  if (!v) return null;
-  const t = Date.parse(v);
-  return Number.isNaN(t) ? null : t;
+  const kstMs = Date.now() + 9*3600*1000;
+  return new Date(kstMs).toISOString().replace('Z', '+09:00');
 }
 
 function parsePublishedToMs(v) {
   if (!v) return null;
-
-  // 숫자형/숫자문자: epoch
-  if (typeof v === 'number') {
-    const n = v < 1e12 ? v * 1000 : v; // 초→ms 보정
-    return n;
-  }
+  if (typeof v === 'number') return v < 1e12 ? v*1000 : v;
   const s = String(v).trim();
-
-  // 순수 숫자문자
-  if (/^\d+$/.test(s)) {
-    const n = parseInt(s, 10);
-    return n < 1e12 ? n * 1000 : n;
-  }
-
-  // 상대표현: "2 hours ago", "3시간 전", "45분 전", "1 day ago"
-  const rel = s.toLowerCase();
-  const now = Date.now();
-  let m = null;
-  if ((m = rel.match(/(\d+)\s*min|(\d+)\s*분\s*전/))) {
-    const n = parseInt(m[1] || m[2], 10);
-    return now - n * 60 * 1000;
-  }
-  if ((m = rel.match(/(\d+)\s*hour|(\d+)\s*시간\s*전/))) {
-    const n = parseInt(m[1] || m[2], 10);
-    return now - n * 3600 * 1000;
-  }
-  if ((m = rel.match(/(\d+)\s*day|(\d+)\s*일\s*전/))) {
-    const n = parseInt(m[1] || m[2], 10);
-    return now - n * 24 * 3600 * 1000;
-  }
-
-  // 일반 날짜 문자열(ISO 등)
-  const t = Date.parse(s);
-  if (!Number.isNaN(t)) return t;
-
-  return null; // 끝까지 못읽으면 null
+  if (/^\d+$/.test(s)) { const n = parseInt(s,10); return n < 1e12 ? n*1000 : n; }
+  const now = Date.now(), low = s.toLowerCase();
+  let m;
+  if ((m = low.match(/(\d+)\s*(?:min|minutes)|(\d+)\s*분\s*전/))) return now - (parseInt(m[1]||m[2],10))*60*1000;
+  if ((m = low.match(/(\d+)\s*(?:hour|hours)|(\d+)\s*시간\s*전/)))  return now - (parseInt(m[1]||m[2],10))*3600*1000;
+  if ((m = low.match(/(\d+)\s*(?:day|days)|(\d+)\s*일\s*전/)))      return now - (parseInt(m[1]||m[2],10))*24*3600*1000;
+  const t = Date.parse(s); return Number.isNaN(t) ? null : t;
 }
 
-function extractStories(json, hours, keepTop = 50) {
+function extractStories(json, hours, keepTop=50) {
   const stories = json?.storySummaries?.trendingStories || [];
-  const cutoff = Date.now() - hours * 3600_000;
+  const cutoff = Date.now() - hours*3600*1000;
 
-  const items = stories.map((s, i) => {
+  const items = stories.map((s,i) => {
     const arts = (s.articles || []).map(a => {
       const publishedRaw = a.time ?? a.published ?? a.date ?? a.timestamp ?? a.pubDate ?? null;
-      const publishedMs = parsePublishedToMs(publishedRaw);
       return {
         title: a.articleTitle || a.title || '',
         url: a.url || '',
         source: a.source || '',
         published: publishedRaw,
-        publishedMs
+        publishedMs: parsePublishedToMs(publishedRaw)
       };
     });
-
     return {
-      rank: i + 1,
+      rank: i+1,
       title: s.title || (s.entityNames?.[0] || ''),
       entityNames: s.entityNames || [],
       shareUrl: s.shareUrl || '',
@@ -132,72 +59,108 @@ function extractStories(json, hours, keepTop = 50) {
     };
   });
 
-  // 1차: 시간 필터 (읽힌 기사 시간 중 하나라도 cutoff 이후면 통과)
   let filtered = items.filter(it => it.articles.some(a => (a.publishedMs ?? 0) >= cutoff));
-
-  // 2차: 너무 엄격해서 다 날아가면 — 시각을 하나도 읽지 못한 스토리는 "후보"로 복구
   if (filtered.length === 0) {
     const fallback = items.filter(it => it.articles.length > 0 && it.articles.every(a => a.publishedMs == null));
-    // 최상위 일부만 살림
     filtered = fallback.slice(0, keepTop);
   }
-
-  // 상위 N개로 제한
   return filtered.slice(0, keepTop);
 }
 
-async function ensureDir(p) {
-  await fs.mkdir(p, { recursive: true });
+async function ensureDir(p){ await fs.mkdir(p,{recursive:true}); }
+
+// API 호출(항상 raw 저장). 실패해도 raw 저장해서 원인 파악.
+async function callRealtime({geo, cat, hl, tz, tag}) {
+  const qs = new URLSearchParams({ hl, tz, cat, geo, fi:'0', fs:'0', ri:'200', rs:'20', sort:'0' });
+  const url = `https://trends.google.com/trends/api/realtimetrends?${qs}`;
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127 Safari/537.36',
+      'Accept':'*/*',
+      'Referer':`https://trends.google.com/trending?geo=${geo}`,
+      'Accept-Language':hl
+    }
+  });
+  const text = await res.text().catch(()=> '');
+  const stamp = new Date().toISOString().replace(/[:.]/g,'-');
+  await ensureDir('data/json');
+  await fs.writeFile(path.join('data','json',`raw_${geo}_cat${cat}_hl${hl}_${tag}_${stamp}.txt`), text || `(empty)`, 'utf8');
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const clean = (text || '').replace(/^\)\]\}',?\n?/, '');
+  return JSON.parse(clean);
 }
 
-async function main() {
+// geo/cat 조합  →  [우선 시도, cat=all 폴백, HL 폴백] 순서로 재시도
+async function fetchWithFallbacks(geo, catRaw) {
+  const cat = mapCat(catRaw);
+  const tries = [];
+
+  const baseHL = HL_ENV || HL_BY_GEO[geo] || 'en-US';
+  const altHL  = baseHL === 'en-US' ? 'ko' : 'en-US'; // 대체 언어
+
+  // 1) 요청한 cat + baseHL
+  tries.push({ geo, cat, hl: baseHL, tag:'base' });
+
+  // 2) cat=all + baseHL
+  if (cat !== 'all') tries.push({ geo, cat:'all', hl: baseHL, tag:'all' });
+
+  // 3) cat 유지 + altHL
+  tries.push({ geo, cat, hl: altHL, tag:'altHL' });
+
+  // 4) cat=all + altHL
+  if (cat !== 'all') tries.push({ geo, cat:'all', hl: altHL, tag:'allAlt' });
+
+  const attempts = [];
+  for (const t of tries) {
+    try {
+      const json = await callRealtime({ ...t, tz: TZ });
+      const items = extractStories(json, HOURS);
+      attempts.push({ ...t, ok: true, count: items.length });
+      if (items.length > 0) return { items, debugAttempts: attempts };
+      // 204/빈 응답 등도 기록
+    } catch (e) {
+      attempts.push({ ...t, ok: false, error: String(e) });
+    }
+  }
+  return { items: [], debugAttempts: attempts };
+}
+
+async function main(){
   const fetchedAtKST = nowKST();
-  const slotKST = new Date();
-  slotKST.setMinutes(0, 0, 0); // 정각 기준 슬롯
-  const slotISO = new Date(slotKST.getTime() + 9 * 3600_000).toISOString().replace('Z', '+09:00');
+
+  const slot = new Date(); slot.setMinutes(0,0,0);
+  const slotISO = new Date(slot.getTime()+9*3600*1000).toISOString().replace('Z','+09:00');
 
   const combos = [];
+
   for (const geo of GEO_LIST) {
     for (const catRaw of CATEGORY_LIST_RAW) {
-      const cat = mapCat(catRaw);
-      const urlUi = `https://trends.google.co.kr/trending?geo=${geo}&category=${catRaw}&status=active&hours=${HOURS}&hl=${HL}&tz=${TZ}`;
-
-      let json, items = [];
-      try {
-        json = await fetchRealtime({ geo, cat });
-        items = extractStories(json, HOURS);
-      } catch (e) {
-        // 실패 시 items 빈 배열로 유지
-        console.error(`[ERR] ${geo}/${catRaw}:`, e.message);
-      }
+      const { items, debugAttempts } = await fetchWithFallbacks(geo, catRaw);
 
       combos.push({
-        geo, category: catRaw, apiCategory: cat, url: urlUi,
-        itemCount: items.length, items
+        geo, category: catRaw,
+        apiCategoryTried: debugAttempts.map(a => `${a.cat}/${a.hl}${a.ok?`:${a.count}`:`!`} `).join('').trim(),
+        itemCount: items.length,
+        items
       });
 
-      // 개별 스냅샷 저장
-      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const dir = path.join('data', 'json');
-      await ensureDir(dir);
+      // 스냅샷(JSON)
+      const stamp = new Date().toISOString().replace(/[:.]/g,'-');
+      await ensureDir('data/json');
       await fs.writeFile(
-        path.join(dir, `realtime_${geo}_cat${cat}_${stamp}.json`),
-        JSON.stringify({ fetchedAtKST, geo, catRaw, catApi: cat, items }, null, 2),
+        path.join('data','json',`realtime_${geo}_cat${mapCat(catRaw)}_${stamp}.json`),
+        JSON.stringify({ fetchedAtKST, geo, catRaw, items, debugAttempts }, null, 2),
         'utf8'
       );
     }
   }
 
-  // latest.json 갱신
   const latest = { slotKST: slotISO, fetchedAtKST, hours: HOURS, combos };
   await ensureDir('data');
   await fs.writeFile('data/latest.json', JSON.stringify(latest, null, 2), 'utf8');
 
-  // 로그에 요약 출력
-  console.log(`[done] ${fetchedAtKST} KST ::`, combos.map(c => `${c.geo}/${c.category}(${c.apiCategory})=${c.itemCount}`).join(', '));
+  console.log(`[done] ${fetchedAtKST} KST ::`, combos.map(c => `${c.geo}/${c.category}=${c.itemCount} [${c.apiCategoryTried}]`).join(' | '));
 }
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+main().catch(e => { console.error(e); process.exit(1); });
