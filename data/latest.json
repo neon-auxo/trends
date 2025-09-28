@@ -1,37 +1,29 @@
 {
-  "slotKST": "2025-09-28T23:00:00+09:00",
-  "fetchedAtKST": "2025-09-28T23:39:22+09:00",
+  "slotKST": "2025-09-28T23:00:00.000+09:00",
+  "fetchedAtKST": "2025-09-28T23:48:03.715+09:00",
+  "hours": 4,
   "combos": [
     {
       "geo": "KR",
-      "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=KR&hours=4&category=3&hl=ko&tz=-540",
-      "status": 200,
-      "capturedAtKST": "2025-09-28T23:37:47+09:00",
-      "pageHash": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=KR&category=3&hl=ko&tz=-540",
       "itemCount": 0,
       "items": []
     },
     {
       "geo": "US",
-      "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=US&hours=4&category=3&hl=ko&tz=-540",
-      "status": 200,
-      "capturedAtKST": "2025-09-28T23:38:34+09:00",
-      "pageHash": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=US&category=3&hl=ko&tz=-540",
       "itemCount": 0,
       "items": []
     },
     {
       "geo": "JP",
-      "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=JP&hours=4&category=3&hl=ko&tz=-540",
-      "status": 200,
-      "capturedAtKST": "2025-09-28T23:39:21+09:00",
-      "pageHash": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=JP&category=3&hl=ko&tz=-540",
       "itemCount": 0,
       "items": []
     }
