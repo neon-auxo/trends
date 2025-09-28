@@ -1,0 +1,31 @@
+{
+  "slotKST": "2025-09-28T23:00:00.000+09:00",
+  "fetchedAtKST": "2025-09-28T23:53:49.857+09:00",
+  "hours": 4,
+  "combos": [
+    {
+      "geo": "KR",
+      "category": "3",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=KR&category=3&hl=ko&tz=-540",
+      "itemCount": 0,
+      "items": []
+    },
+    {
+      "geo": "US",
+      "category": "3",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=US&category=3&hl=ko&tz=-540",
+      "itemCount": 0,
+      "items": []
+    },
+    {
+      "geo": "JP",
+      "category": "3",
+      "apiCategory": "b",
+      "url": "https://trends.google.co.kr/trending?geo=JP&category=3&hl=ko&tz=-540",
+      "itemCount": 0,
+      "items": []
+    }
+  ]
+}
