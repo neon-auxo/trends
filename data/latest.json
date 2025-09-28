@@ -1,26 +1,944 @@
 {
-  "fetchedAtKST": "2025-09-28T23:12:38+09:00",
+  "fetchedAtKST": "2025-09-28T23:21:39+09:00",
   "combos": [
     {
       "geo": "KR",
       "hours": "4",
       "category": "3",
-      "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T23:11:10+09:00"
+      "url": "https://trends.google.co.kr/trending?geo=KR&hours=4&category=3",
+      "status": 200,
+      "capturedAtKST": "2025-09-28T23:21:01+09:00",
+      "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
+      "itemCount": 13,
+      "items": [
+        {
+          "rank": 1,
+          "term": "Trends",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "term": "로그인",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "term": "home홈",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "term": "search탐색",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 5,
+          "term": "trending_up실시간 인기",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 6,
+          "term": "calendar_month올해의 검색어",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 7,
+          "term": "help_outline도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 8,
+          "term": "트렌드 상태",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 9,
+          "term": "트렌드 분석",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 10,
+          "term": "개인정보처리방침",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 11,
+          "term": "약관",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 12,
+          "term": "정보",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 13,
+          "term": "help도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/kr/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        }
+      ],
+      "snapshot": "data/snapshots/trending_KR_4h_cat3_2025-09-28T14-21-01-843Z.html",
+      "usedCSV": false
     },
     {
       "geo": "US",
       "hours": "4",
       "category": "3",
-      "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T23:11:54+09:00"
+      "url": "https://trends.google.co.kr/trending?geo=US&hours=4&category=3",
+      "status": 200,
+      "capturedAtKST": "2025-09-28T23:21:20+09:00",
+      "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
+      "itemCount": 13,
+      "items": [
+        {
+          "rank": 1,
+          "term": "Trends",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "term": "로그인",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "term": "home홈",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "term": "search탐색",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 5,
+          "term": "trending_up실시간 인기",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 6,
+          "term": "calendar_month올해의 검색어",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 7,
+          "term": "help_outline도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 8,
+          "term": "트렌드 상태",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 9,
+          "term": "트렌드 분석",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 10,
+          "term": "개인정보처리방침",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 11,
+          "term": "약관",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 12,
+          "term": "정보",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 13,
+          "term": "help도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/us/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        }
+      ],
+      "snapshot": "data/snapshots/trending_US_4h_cat3_2025-09-28T14-21-20-013Z.html",
+      "usedCSV": false
     },
     {
       "geo": "JP",
       "hours": "4",
       "category": "3",
-      "error": "Error: 필수 셀렉터를 찾지 못했습니다(페이지 구조 변경 가능).",
-      "capturedAtKST": "2025-09-28T23:12:38+09:00"
+      "url": "https://trends.google.co.kr/trending?geo=JP&hours=4&category=3",
+      "status": 200,
+      "capturedAtKST": "2025-09-28T23:21:37+09:00",
+      "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
+      "itemCount": 13,
+      "items": [
+        {
+          "rank": 1,
+          "term": "Trends",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "term": "로그인",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "term": "home홈",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "term": "search탐색",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 5,
+          "term": "trending_up실시간 인기",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 6,
+          "term": "calendar_month올해의 검색어",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 7,
+          "term": "help_outline도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 8,
+          "term": "트렌드 상태",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 9,
+          "term": "트렌드 분석",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 10,
+          "term": "개인정보처리방침",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 11,
+          "term": "약관",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 12,
+          "term": "정보",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        },
+        {
+          "rank": 13,
+          "term": "help도움말",
+          "desc": "",
+          "explore": "",
+          "links": [
+            {
+              "title": "calendar_month올해의 검색어",
+              "url": "https://trends.withgoogle.com/ko/year-in-search/2024/jp/",
+              "domain": "trends.withgoogle.com"
+            },
+            {
+              "title": "help_outline도움말",
+              "url": "https://support.google.com/trends?hl=ko",
+              "domain": "support.google.com"
+            },
+            {
+              "title": "개인정보처리방침",
+              "url": "https://policies.google.com/privacy?hl=ko",
+              "domain": "policies.google.com"
+            }
+          ]
+        }
+      ],
+      "snapshot": "data/snapshots/trending_JP_4h_cat3_2025-09-28T14-21-37-717Z.html",
+      "usedCSV": false
     }
   ]
 }
