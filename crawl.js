@@ -117,64 +117,84 @@ async function tryDownloadCSV(page) {
 
 /* ---------- DOM 폴백 추출 ---------- */
 async function extractItemsFromDOM(page) {
-  // 제목 후보 폭넓게 수집
-  const raw = await page.$$eval(
-    'h3, h2, [role="heading"], a[aria-label], article h3, section h3, li h3',
-    els => els.map(e => (e.textContent || "").trim()).filter(Boolean)
-  ).catch(() => []);
-  if (!raw.length) return [];
+  // 메인 영역만 대상으로 추출(헤더/푸터/네비 제외)
+  await page.waitForSelector('main', { timeout: 10000 }).catch(() => {});
 
-  const seen = new Set(); const heads = [];
-  for (const t of raw) {
-    const s = t.replace(/\s+/g, " ").trim();
-    if (!s) continue;
-    if (s.length < 2 || s.length > 120) continue;
-    const key = s.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    heads.push(s);
-    if (heads.length >= 40) break;
-  }
+  const items = await page.evaluate(() => {
+    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
 
-  const items = [];
-  for (let i = 0; i < heads.length; i++) {
-    const term = heads[i];
-    const info = await page.evaluate((needle) => {
-      const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-      const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
-      function findNodeByText(txt) {
-        const xp = document.evaluate(`//*[contains(normalize-space(.), "${txt.replace(/"/g, '\\"')}")]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        if (xp.snapshotLength > 0) return xp.snapshotItem(0);
-        return null;
-      }
-      const root = findNodeByText(needle);
-      if (!root) return { desc: "", links: [] };
+    // 네비게이션/정책/계정 관련 텍스트는 제외
+    const stopTitle = new RegExp(
+      [
+        "^trends$",
+        "^로그인$",
+        "^home홈$",
+        "^search탐색$",
+        "^trending_up실시간 인기$",
+        "^help[_ ]?outline도움말$",
+        "^개인정보처리방침$",
+        "^약관$",
+        "^정보$",
+        "^트렌드 상태$",
+        "^트렌드 분석$"
+      ].join("|"),
+      "i"
+    );
 
-      let desc = "";
-      const scope = root.closest("article") || root.parentElement;
-      if (scope) {
-        const cand = scope.querySelector("p") || scope.querySelector("div p");
-        if (cand) desc = norm(cand.textContent);
-      }
+    const badHost = /^(?:trends\.withgoogle|support\.google|policies\.google|accounts\.google)\./i;
+
+    const scope = document.querySelector("main") || document.body;
+
+    // 메인 내부의 카드 후보만 수집 (article 위주)
+    const cards = Array.from(
+      scope.querySelectorAll("main article, main section article, main li[role='listitem'] article")
+    );
+
+    const out = [];
+    for (const el of cards) {
+      const titleEl = el.querySelector("h3, h2, [role='heading']");
+      const term = norm(titleEl?.textContent);
+      if (!term || stopTitle.test(term)) continue;
+
+      // 설명 후보
+      let desc = norm(el.querySelector("p, div p")?.textContent) || "";
       if (desc.length > 160) desc = desc.slice(0, 160);
 
-      const links = [];
-      const as = (scope || document).querySelectorAll("a[href^='http']");
-      for (const a of as) {
-        const url = a.getAttribute("href") || "";
-        if (!url) continue;
-        if (/trends\.google/i.test(url)) continue;
-        const title = norm(a.textContent);
-        if (!title) continue;
-        links.push({ title, url, domain: host(url) });
-        if (links.length >= 3) break;
-      }
-      return { desc, links };
-    }, term).catch(() => ({ desc: "", links: [] }));
+      // 카드 내부 외부 링크(구글 내부 정책/도움말/연간검색 제외)
+      const links = Array.from(el.querySelectorAll("a[href^='http']"))
+        .map((a) => {
+          const url = a.getAttribute("href") || "";
+          const title = norm(a.textContent);
+          try {
+            const d = new URL(url).hostname.replace(/^www\./, "");
+            return { title, url, domain: d };
+          } catch {
+            return null;
+          }
+        })
+        .filter((x) => x && x.title && x.url && !badHost.test(x.domain))
+        .slice(0, 3);
 
-    items.push({ rank: i + 1, term, desc: info.desc || "", explore: "", links: (info.links || []).slice(0,3) });
-    if (items.length >= 30) break;
-  }
+      // 링크 하나도 없고 설명도 거의 없으면 노이즈일 확률 ↑ → 스킵
+      if (!links.length && desc.length < 10) continue;
+
+      out.push({ term, desc, explore: "", links });
+    }
+
+    // 중복 제거 + 상위 30개
+    const seen = new Set();
+    const dedup = [];
+    for (const r of out) {
+      const k = r.term.toLowerCase();
+      if (seen.has(k)) continue;
+      seen.add(k);
+      dedup.push(r);
+      if (dedup.length >= 30) break;
+    }
+
+    return dedup.map((r, i) => ({ rank: i + 1, ...r }));
+  });
+
   return items;
 }
 
