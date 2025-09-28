@@ -1,13 +1,14 @@
 {
-  "fetchedAtKST": "2025-09-28T23:21:39+09:00",
+  "slotKST": "2025-09-28T23:00:00+09:00",
+  "fetchedAtKST": "2025-09-28T23:31:26+09:00",
   "combos": [
     {
       "geo": "KR",
       "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=KR&hours=4&category=3",
+      "url": "https://trends.google.co.kr/trending?geo=KR&hours=4&category=3&hl=ko&tz=-540",
       "status": 200,
-      "capturedAtKST": "2025-09-28T23:21:01+09:00",
+      "capturedAtKST": "2025-09-28T23:31:17+09:00",
       "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
       "itemCount": 13,
       "items": [
@@ -310,17 +311,15 @@
             }
           ]
         }
-      ],
-      "snapshot": "data/snapshots/trending_KR_4h_cat3_2025-09-28T14-21-01-843Z.html",
-      "usedCSV": false
+      ]
     },
     {
       "geo": "US",
       "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=US&hours=4&category=3",
+      "url": "https://trends.google.co.kr/trending?geo=US&hours=4&category=3&hl=ko&tz=-540",
       "status": 200,
-      "capturedAtKST": "2025-09-28T23:21:20+09:00",
+      "capturedAtKST": "2025-09-28T23:31:21+09:00",
       "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
       "itemCount": 13,
       "items": [
@@ -623,17 +622,15 @@
             }
           ]
         }
-      ],
-      "snapshot": "data/snapshots/trending_US_4h_cat3_2025-09-28T14-21-20-013Z.html",
-      "usedCSV": false
+      ]
     },
     {
       "geo": "JP",
       "hours": "4",
       "category": "3",
-      "url": "https://trends.google.co.kr/trending?geo=JP&hours=4&category=3",
+      "url": "https://trends.google.co.kr/trending?geo=JP&hours=4&category=3&hl=ko&tz=-540",
       "status": 200,
-      "capturedAtKST": "2025-09-28T23:21:37+09:00",
+      "capturedAtKST": "2025-09-28T23:31:25+09:00",
       "pageHash": "sha256:b6b9d418ad992234e67079ef4fb1f83d7b10961b7deac2d7298fa28da2374f48",
       "itemCount": 13,
       "items": [
@@ -936,9 +933,7 @@
             }
           ]
         }
-      ],
-      "snapshot": "data/snapshots/trending_JP_4h_cat3_2025-09-28T14-21-37-717Z.html",
-      "usedCSV": false
+      ]
     }
   ]
 }
