@@ -36,7 +36,7 @@ function nowKST() {
 async function fetchRealtime({ geo, cat }) {
   const params = new URLSearchParams({
     hl: HL, tz: String(TZ), cat, geo,
-    ri: '200', sort: '0' // 최대 200개, 정렬 기본
+    fi: '0', fs: '0', ri: '200', rs: '20', sort: '0'
   });
   const url = `https://trends.google.com/trends/api/realtimetrends?${params}`;
   const res = await fetch(url, {
@@ -44,15 +44,19 @@ async function fetchRealtime({ geo, cat }) {
       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127 Safari/537.36',
       'Accept': '*/*',
       'Referer': `https://trends.google.com/trending?geo=${geo}`,
+      'Accept-Language': HL
     }
   });
   const text = await res.text();
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
 
-  // XSSI prefix ")]}'," 제거 후 JSON 파싱
+  // 디버그: 원문 저장
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  await fs.mkdir(path.join('data', 'json'), { recursive: true });
+  await fs.writeFile(path.join('data', 'json', `raw_${geo}_cat${cat}_${stamp}.txt`), text, 'utf8');
+
   const clean = text.replace(/^\)\]\}',?\n?/, '');
-  const json = JSON.parse(clean);
-  return json;
+  return JSON.parse(clean);
 }
 
 function toEpochMsMaybe(v) {
@@ -61,20 +65,62 @@ function toEpochMsMaybe(v) {
   return Number.isNaN(t) ? null : t;
 }
 
-function extractStories(json, hours) {
-  // 구조: json.storySummaries.trendingStories[*]
+function parsePublishedToMs(v) {
+  if (!v) return null;
+
+  // 숫자형/숫자문자: epoch
+  if (typeof v === 'number') {
+    const n = v < 1e12 ? v * 1000 : v; // 초→ms 보정
+    return n;
+  }
+  const s = String(v).trim();
+
+  // 순수 숫자문자
+  if (/^\d+$/.test(s)) {
+    const n = parseInt(s, 10);
+    return n < 1e12 ? n * 1000 : n;
+  }
+
+  // 상대표현: "2 hours ago", "3시간 전", "45분 전", "1 day ago"
+  const rel = s.toLowerCase();
+  const now = Date.now();
+  let m = null;
+  if ((m = rel.match(/(\d+)\s*min|(\d+)\s*분\s*전/))) {
+    const n = parseInt(m[1] || m[2], 10);
+    return now - n * 60 * 1000;
+  }
+  if ((m = rel.match(/(\d+)\s*hour|(\d+)\s*시간\s*전/))) {
+    const n = parseInt(m[1] || m[2], 10);
+    return now - n * 3600 * 1000;
+  }
+  if ((m = rel.match(/(\d+)\s*day|(\d+)\s*일\s*전/))) {
+    const n = parseInt(m[1] || m[2], 10);
+    return now - n * 24 * 3600 * 1000;
+  }
+
+  // 일반 날짜 문자열(ISO 등)
+  const t = Date.parse(s);
+  if (!Number.isNaN(t)) return t;
+
+  return null; // 끝까지 못읽으면 null
+}
+
+function extractStories(json, hours, keepTop = 50) {
   const stories = json?.storySummaries?.trendingStories || [];
   const cutoff = Date.now() - hours * 3600_000;
 
   const items = stories.map((s, i) => {
-    const arts = (s.articles || []).map(a => ({
-      title: a.articleTitle || a.title || '',
-      url: a.url || '',
-      source: a.source || '',
-      // 일부는 문자열 시각, 일부는 epoch-like일 수 있어 최대한 파싱
-      published: a.time || a.published || null,
-      publishedMs: toEpochMsMaybe(a.time || a.published)
-    }));
+    const arts = (s.articles || []).map(a => {
+      const publishedRaw = a.time ?? a.published ?? a.date ?? a.timestamp ?? a.pubDate ?? null;
+      const publishedMs = parsePublishedToMs(publishedRaw);
+      return {
+        title: a.articleTitle || a.title || '',
+        url: a.url || '',
+        source: a.source || '',
+        published: publishedRaw,
+        publishedMs
+      };
+    });
 
     return {
       rank: i + 1,
@@ -86,8 +132,18 @@ function extractStories(json, hours) {
     };
   });
 
-  // hours 필터: 최근 hours 이내 기사 포함 스토리만
-  return items.filter(it => it.articles.some(a => (a.publishedMs ?? 0) >= cutoff));
+  // 1차: 시간 필터 (읽힌 기사 시간 중 하나라도 cutoff 이후면 통과)
+  let filtered = items.filter(it => it.articles.some(a => (a.publishedMs ?? 0) >= cutoff));
+
+  // 2차: 너무 엄격해서 다 날아가면 — 시각을 하나도 읽지 못한 스토리는 "후보"로 복구
+  if (filtered.length === 0) {
+    const fallback = items.filter(it => it.articles.length > 0 && it.articles.every(a => a.publishedMs == null));
+    // 최상위 일부만 살림
+    filtered = fallback.slice(0, keepTop);
+  }
+
+  // 상위 N개로 제한
+  return filtered.slice(0, keepTop);
 }
 
 async function ensureDir(p) {
