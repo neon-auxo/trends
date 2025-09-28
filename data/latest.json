@@ -1,29 +1,26 @@
 {
   "slotKST": "2025-09-29T00:00:00.000+09:00",
-  "fetchedAtKST": "2025-09-29T00:08:45.822+09:00",
+  "fetchedAtKST": "2025-09-29T00:20:38.369+09:00",
   "hours": 4,
   "combos": [
     {
       "geo": "KR",
       "category": "3",
-      "apiCategory": "b",
-      "url": "https://trends.google.co.kr/trending?geo=KR&category=3&status=active&hours=4&hl=ko&tz=-540",
+      "apiCategoryTried": "b/ko! all/ko! b/en-US! all/en-US!",
       "itemCount": 0,
       "items": []
     },
     {
       "geo": "US",
       "category": "3",
-      "apiCategory": "b",
-      "url": "https://trends.google.co.kr/trending?geo=US&category=3&status=active&hours=4&hl=ko&tz=-540",
+      "apiCategoryTried": "b/ko! all/ko! b/en-US! all/en-US!",
       "itemCount": 0,
       "items": []
     },
     {
       "geo": "JP",
       "category": "3",
-      "apiCategory": "b",
-      "url": "https://trends.google.co.kr/trending?geo=JP&category=3&status=active&hours=4&hl=ko&tz=-540",
+      "apiCategoryTried": "b/ko! all/ko! b/en-US! all/en-US!",
       "itemCount": 0,
       "items": []
     }
