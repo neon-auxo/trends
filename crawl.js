@@ -104,7 +104,7 @@ async function main() {
   for (const geo of GEO_LIST) {
     for (const catRaw of CATEGORY_LIST_RAW) {
       const cat = mapCat(catRaw);
-      const urlUi = `https://trends.google.co.kr/trending?geo=${geo}&category=${catRaw}&hl=${HL}&tz=${TZ}`;
+      const urlUi = `https://trends.google.co.kr/trending?geo=${geo}&category=${catRaw}&status=active&hours=${HOURS}&hl=${HL}&tz=${TZ}`;
 
       let json, items = [];
       try {
