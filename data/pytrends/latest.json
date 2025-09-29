@@ -1,5 +1,5 @@
 {
-  "fetchedAtKST": "2025-09-29T21:29:25.728696+09:00",
+  "fetchedAtKST": "2025-09-29T21:36:07.801370+09:00",
   "pns": [
     "KR",
     "US",
@@ -12,7 +12,7 @@
       "pn": "KR",
       "count": 0,
       "ok": false,
-      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "error": "The request failed: Google returned a response with code 404",
       "csv": null,
       "sample": null
     },
@@ -20,7 +20,7 @@
       "pn": "US",
       "count": 0,
       "ok": false,
-      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "error": "The request failed: Google returned a response with code 404",
       "csv": null,
       "sample": null
     },
@@ -28,7 +28,7 @@
       "pn": "JP",
       "count": 0,
       "ok": false,
-      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "error": "The request failed: Google returned a response with code 404",
       "csv": null,
       "sample": null
     }
