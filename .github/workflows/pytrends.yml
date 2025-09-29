@@ -1,0 +1,45 @@
+name: pytrends-hourly
+
+on:
+  schedule:
+    - cron: "5 * * * *"   # 매시 05분(정각 혼잡·경합 회피)
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: pytrends-hourly
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Fetch realtime trends (pytrends)
+        env:
+          PN_LIST: "KR,US,JP"
+          HL: "ko"
+          TZ: "540"         # KST(+9h)
+          RETRIES: "3"
+          BACKOFF: "0.3"
+        run: python scripts/pyrealtime.py
+
+      - name: Commit outputs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "update(pytrends): realtime trends"
+          file_pattern: |
+            data/pytrends/latest.json
+            data/pytrends/realtime_*.csv

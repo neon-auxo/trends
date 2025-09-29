@@ -1,8 +1,0 @@
-{
-  "name": "trends-hourly",
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "crawl": "node crawl.js"
-  }
-}
