@@ -1,0 +1,36 @@
+{
+  "fetchedAtKST": "2025-09-29T21:29:25.728696+09:00",
+  "pns": [
+    "KR",
+    "US",
+    "JP"
+  ],
+  "hl": "ko",
+  "tz": 540,
+  "combos": [
+    {
+      "pn": "KR",
+      "count": 0,
+      "ok": false,
+      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "csv": null,
+      "sample": null
+    },
+    {
+      "pn": "US",
+      "count": 0,
+      "ok": false,
+      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "csv": null,
+      "sample": null
+    },
+    {
+      "pn": "JP",
+      "count": 0,
+      "ok": false,
+      "error": "Retry.__init__() got an unexpected keyword argument 'method_whitelist'",
+      "csv": null,
+      "sample": null
+    }
+  ]
+}
