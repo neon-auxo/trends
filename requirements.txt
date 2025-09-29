@@ -1,4 +1,1 @@
-pytrends==4.9.1
-pandas==2.2.2
-requests==2.31.0        # urllib3 1.26과 잘 맞음
-urllib3==1.26.18        # ← 핵심: 2.x 말고 1.26으로 고정
+selenium==4.24.0
