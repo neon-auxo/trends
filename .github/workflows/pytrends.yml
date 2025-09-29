@@ -26,6 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          python -c "import urllib3,requests; print('urllib3=', urllib3.__version__, 'requests=', requests.__version__)"
 
       - name: Fetch realtime trends (pytrends)
         env:
