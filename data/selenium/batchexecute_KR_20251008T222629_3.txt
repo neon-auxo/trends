@@ -1,6 +1,0 @@
-)]}'
-
-246
-[["wrb.fr","i0OFE","[null,[[\"indonesia vs\",null,\"KR\",[1759950000],null,null,100,null,100,[\"indonesia vs\"],[17],[[4214854561,\"en\",\"US\"]],\"indonesia vs\"]]]",null,null,null,"generic"],["di",46],["af.httprm",46,"6315970548751935146",3]]
-25
-[["e",4,null,null,282]]
