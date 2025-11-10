@@ -1,6 +1,0 @@
-)]}'
-
-380
-[["wrb.fr","i0OFE","[null,[[\"real betis vs atlético madrid\",null,\"KR\",[1761600000],null,null,200,null,1000,[\"real betis vs atlético madrid\"],[17],[[4234002802,\"es\",\"KR\"],[4252511015,\"es\",\"KR\"],[4259965176,\"es\",\"KR\"],[4254224224,\"es\",\"KR\"]],\"real betis vs atletico madrid\"]]]",null,null,null,"generic"],["di",66],["af.httprm",65,"-1194572421213041080",2]]
-25
-[["e",4,null,null,418]]

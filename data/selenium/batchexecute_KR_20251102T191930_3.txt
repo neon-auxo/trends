@@ -1,6 +1,0 @@
-)]}'
-
-831
-[["wrb.fr","i0OFE","[null,[[\"barcelona vs elche\",null,\"KR\",[1762105200],null,null,200,null,1000,[\"barcelona vs elche\"],[17],[[4248815086,\"es\",\"KR\"],[4271560180,\"es\",\"KR\"],[4271575549,\"es\",\"KR\"],[4271554071,\"es\",\"KR\"],[4257975071,\"es\",\"KR\"],[4258441903,\"es\",\"KR\"]],\"barcelona vs elche\"],[\"man city vs bournemouth\",null,\"KR\",[1762101600],null,null,200,null,1000,[\"man city vs bournemouth\"],[17],[[4246303975,\"en\",\"KR\"],[4258195151,\"en\",\"KR\"],[4271458709,\"en\",\"KR\"],[4266812049,\"en\",\"KR\"]],\"man city vs bournemouth\"],[\"맨시티\",null,\"KR\",[1762102800],null,null,1000,null,700,[\"맨시티\",\"본머스\"],[17],[[4260012762,\"ko\",\"KR\"],[4269813879,\"ko\",\"KR\"],[4270382246,\"ko\",\"KR\"]],\"맨시티\"]]]",null,null,null,"generic"],["di",41],["af.httprm",40,"-5284762399403801960",11]]
-25
-[["e",4,null,null,899]]
