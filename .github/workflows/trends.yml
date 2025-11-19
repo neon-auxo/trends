@@ -1,63 +1,63 @@
-name: hourly-trends (batchexecute save-only)
+# name: hourly-trends (batchexecute save-only)
 
-on:
-  schedule:
-    - cron: "7 * * * *"   # UTC 기준. KST로는 매시 +16분쯤
-  workflow_dispatch: {}    # 수동 실행 버튼
+# on:
+#   schedule:
+#     - cron: "7 * * * *"   # UTC 기준. KST로는 매시 +16분쯤
+#   workflow_dispatch: {}    # 수동 실행 버튼
 
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write   # 파일 커밋 권한
+# jobs:
+#   run:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write   # 파일 커밋 권한
 
-    steps:
-      - uses: actions/checkout@v4
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
+#       - name: Set up Chrome
+#         uses: browser-actions/setup-chrome@v1
+#         with:
+#           chrome-version: stable
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.11"
 
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+#       - name: Install deps
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
 
-      - name: Run selenium (save-only; KR,US,JP)
-        env:
-          GEO_LIST: "KR,US,JP"
-          CATEGORY: "3"
-          HOURS: "4"
-          TZ: "-540"       # KST
-          HEADED: "0"      # 1이면 창 띄움(액션에선 0)
-        run: |
-          python scripts/selenium_batchexecute.py
+#       - name: Run selenium (save-only; KR,US,JP)
+#         env:
+#           GEO_LIST: "KR,US,JP"
+#           CATEGORY: "3"
+#           HOURS: "4"
+#           TZ: "-540"       # KST
+#           HEADED: "0"      # 1이면 창 띄움(액션에선 0)
+#         run: |
+#           python scripts/selenium_batchexecute.py
 
-      - name: Commit outputs
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "update: batchexecute *_3.txt (hourly)"
-          file_pattern: data/selenium/batchexecute_*_*_3.txt
-          commit_user_name: github-actions
-          commit_user_email: actions@github.com
+#       - name: Commit outputs
+#         uses: stefanzweifel/git-auto-commit-action@v5
+#         with:
+#           commit_message: "update: batchexecute *_3.txt (hourly)"
+#           file_pattern: data/selenium/batchexecute_*_*_3.txt
+#           commit_user_name: github-actions
+#           commit_user_email: actions@github.com
 
-      # (선택) 14일 지난 파일 자동 정리
-      - name: Prune old files (optional)
-        run: |
-          find data/selenium -type f -name "batchexecute_*_*.txt" -mtime +14 -print -delete || true
+#       # (선택) 14일 지난 파일 자동 정리
+#       - name: Prune old files (optional)
+#         run: |
+#           find data/selenium -type f -name "batchexecute_*_*.txt" -mtime +14 -print -delete || true
 
-      # (선택) 정리 커밋
-      - name: Commit pruning (optional)
-        if: always()
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: prune old batchexecute files"
-          file_pattern: data/selenium/batchexecute_*_*_*.txt
-          commit_user_name: github-actions
-          commit_user_email: actions@github.com
+#       # (선택) 정리 커밋
+#       - name: Commit pruning (optional)
+#         if: always()
+#         uses: stefanzweifel/git-auto-commit-action@v5
+#         with:
+#           commit_message: "chore: prune old batchexecute files"
+#           file_pattern: data/selenium/batchexecute_*_*_*.txt
+#           commit_user_name: github-actions
+#           commit_user_email: actions@github.com
